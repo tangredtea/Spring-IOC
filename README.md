@@ -6,13 +6,19 @@ Spring IOC容器简单实现，实现了一些基本的核心功能以及简单�
 - [Spring手写注解注入方式](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring%E6%89%8B%E5%86%99%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F.md)
 - [Spring手写简单MVC实现](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring%E6%89%8B%E5%86%99%E7%AE%80%E5%8D%95MVC%E5%AE%9E%E7%8E%B0.md)
 ### 目前已实现：
-- xml配置文件读取
+- xml注入
+- 注解注入
+- 简单MVC功能
+### 注入支持
+- 递归注入
 - 属性注入
-- 引用依赖注入
-- 递归引用注入
-- singleton与prototype模式注入
+- 引用注入（但未解决循环依赖）
 - 注解配置
-- 简单的SpringMVC的实现
+- 单例以及原型模式切换
+### 运用的设计模式
+- 工厂设计模式 : Spring使用工厂模式通过 BeanFactory、ApplicationContext 创建 bean 对象。
+- 单例设计模式 : Spring 中的 Bean 默认都是单例的。
+- 适配器模式 :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配Controller。（体现了一点）
 
 ### TODO：
 - AOP实现
