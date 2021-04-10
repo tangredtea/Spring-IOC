@@ -1,4 +1,4 @@
-[![license](https://badgen.net/github/license/laowenruo/Spring-IOC?color=green)](https://github.com/laowenruo/Spring-IOC/master/LICENSE)
+[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/laowenruo/Spring-IOC/master/LICENSE)
 [![stars](https://badgen.net/github/stars//laowenruo/Spring-IOC)](https://github.com//laowenruo/Spring-IOC/stargazers)
 [![contributors](https://badgen.net/github/contributors/laowenruo/Spring-IOC)](https://github.com/laowenruo/Spring-IOC/graphs/contributors)
 [![help-wanted](https://badgen.net/github/label-issues/laowenruo/Spring-IOC/help%20wanted/open)](https://github.com/laowenruo/Spring-IOC/labels/help%20wanted)
