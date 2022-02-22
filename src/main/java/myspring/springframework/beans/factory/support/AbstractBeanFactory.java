@@ -1,11 +1,9 @@
 package myspring.springframework.beans.factory.support;
 
-import myspring.springframework.beans.factory.BeanFactory;
 import myspring.springframework.beans.factory.BeansException;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 import myspring.springframework.beans.factory.config.BeanPostProcessor;
 import myspring.springframework.beans.factory.config.ConfigurableBeanFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
     /** BeanPostProcessors to apply in createBean */
-    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     /**
      * 获取bean
@@ -48,7 +46,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @param name         对象名
      * @param requiredType 需要的class
      * @return bean
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {

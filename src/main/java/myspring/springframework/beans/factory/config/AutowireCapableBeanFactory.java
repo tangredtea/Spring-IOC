@@ -14,7 +14,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
      * @param existingBean 对象
      * @param beanName bean名字
      * @return object
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
 
@@ -24,7 +24,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
      * @param existingBean 对象
      * @param beanName bean名字
      * @return object
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException;
 

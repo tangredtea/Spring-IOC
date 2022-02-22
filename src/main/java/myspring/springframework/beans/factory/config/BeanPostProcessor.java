@@ -13,7 +13,7 @@ public interface BeanPostProcessor {
      * @param bean 对象
      * @param beanName bean名字
      * @return object
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
 
@@ -23,7 +23,7 @@ public interface BeanPostProcessor {
      * @param bean 对象
      * @param beanName bean名字
      * @return object
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
 }

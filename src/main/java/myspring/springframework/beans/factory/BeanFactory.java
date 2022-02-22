@@ -29,7 +29,7 @@ public interface BeanFactory {
      * @param requiredType 需要的class
      * @param <T> 泛型
      * @return bean
-     * @throws BeansException
+     * @throws BeansException 异常
      */
     <T> T getBean(String name, Class<T> requiredType) throws BeansException;
 

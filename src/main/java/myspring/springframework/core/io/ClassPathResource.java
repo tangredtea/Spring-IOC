@@ -2,8 +2,6 @@ package myspring.springframework.core.io;
 
 import cn.hutool.core.lang.Assert;
 import myspring.springframework.util.ClassUtils;
-
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -13,7 +11,7 @@ public class ClassPathResource implements Resource{
 
     private final String path;
 
-    private ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     public ClassPathResource(String path){
         this(path, null);
@@ -29,10 +27,9 @@ public class ClassPathResource implements Resource{
      * 得到输入流
      *
      * @return InputStream
-     * @throws IOException 异常
      */
     @Override
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
         return classLoader.getResourceAsStream(path);
     }
 }

@@ -1,6 +1,5 @@
 package myspring.springframework.core.io;
 
-import cn.hutool.core.io.resource.UrlResource;
 import cn.hutool.core.lang.Assert;
 
 import java.net.MalformedURLException;
@@ -24,7 +23,7 @@ public class DefaultResourceLoader implements ResourceLoader{
         }else {
             try{
                 URL url = new URL(location);
-                return (Resource) new UrlResource(url);
+                return new UrlResource(url);
             }catch (MalformedURLException e){
                 return new FileSystemResource(location);
             }

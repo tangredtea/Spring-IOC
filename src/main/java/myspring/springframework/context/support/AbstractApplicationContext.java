@@ -9,6 +9,9 @@ import myspring.springframework.core.io.DefaultResourceLoader;
 
 import java.util.Map;
 
+/**
+ * @author Ryan
+ */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
 
     @Override
@@ -29,8 +32,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         beanFactory.preInstantiateSingletons();
     }
 
+    /**
+     * 刷新beanFactory
+     * @throws BeansException 异常
+     */
     protected abstract void refreshBeanFactory() throws BeansException;
 
+    /**
+     * 得到beanFactory
+     * @return beanFactory
+     */
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
     private void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
