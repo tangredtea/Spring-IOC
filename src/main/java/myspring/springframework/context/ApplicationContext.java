@@ -1,13 +1,10 @@
 package myspring.springframework.context;
 
+import myspring.springframework.beans.factory.ListableBeanFactory;
+
 /**
- * 应用程序上下文接口
- *
+ * @author Ryan
  */
-public interface ApplicationContext {
-
-    Object getBean(Class clazz) throws Exception;
-
-    Object getBean(String beanName) throws Exception;
+public interface ApplicationContext extends ListableBeanFactory {
 
 }
