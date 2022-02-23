@@ -33,6 +33,22 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     /**
+     * 注册关闭监听
+     */
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
+
+    /**
+     * 手动关闭逻辑
+     */
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
+
+    /**
      * 刷新beanFactory
      * @throws BeansException 异常
      */
@@ -57,6 +73,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
             beanFactory.addBeanPostProcessor(beanPostProcessor);
         }
     }
+
+
 
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
