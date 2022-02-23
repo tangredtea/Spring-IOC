@@ -107,9 +107,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         String initMethod = beanDefinition.getInitMethodName();
         if (StrUtil.isNotEmpty(initMethod)){
             Method method = beanDefinition.getBeanClass().getMethod(initMethod);
-            if (null == method){
-                throw new BeansException("Could not find an init method named '" + initMethod + "' on bean with name" + beanName + "'");
-            }
             method.invoke(bean);
         }
     }

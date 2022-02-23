@@ -15,8 +15,8 @@
 - 执行处理器（Controller，也叫后端控制器）。 
 - Controller 执行完成返回 ModelAndView。 
 - HandlerAdapter 将 controller 执行结果 ModelAndView 返回给 DispatcherServlet。 
-- DispatcherServlet 将 ModelAndView 传给 ViewReslover 视图解析器。 
-- ViewReslover 解析后返回具体 View。 
+- DispatcherServlet 将 ModelAndView 传给 ViewResolver 视图解析器。 
+- ViewResolver 解析后返回具体 View。 
 - DispatcherServlet 对 View 进行渲染视图（即将模型数据填充至视图中）。 
 - DispatcherServlet 响应用户。
 
@@ -42,7 +42,7 @@
   ```xml
   <?xml version="1.0" encoding="UTF-8"?>
   <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+           xmlns="http://java.sun.com/xml/ns/javaee"
            xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
            version="3.0">
       <servlet>
@@ -64,7 +64,7 @@
 
   
 
-+ web.xml解析：首先定义了DispatcherServlet的所在路径，定义得跟我们以前javaweb配置servlet一样，并且DispatcherServlet拦截全路径的（即/*），并且我们配置初始化文件，在代码中为application.properties，当然我们可以定义为其他文件，关于这个文件如下
++ web.xml解析：首先定义了DispatcherServlet的所在路径，定义得跟我们以前java web配置servlet一样，并且DispatcherServlet拦截全路径的（即/*），并且我们配置初始化文件，在代码中为application.properties，当然我们可以定义为其他文件，关于这个文件如下
 
   ```
   scanPackage=top.guoziyang.main.controller

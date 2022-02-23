@@ -49,7 +49,7 @@ public @interface Qualifier {
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Value {
-    public String value();
+    String value();
 }
 ```
 
@@ -60,7 +60,7 @@ public @interface Value {
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <component-scan base-package="XXX.XXX"></component-scan>
+  <component-scan base-package="XXX.XXX"/>
 </beans>
 ```
 

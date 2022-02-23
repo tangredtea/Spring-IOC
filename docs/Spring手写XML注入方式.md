@@ -18,23 +18,23 @@
 
 #### 定义ApplicationContext
 
-> 因为我们使用Spring的Xml注入的时候，我们是通过ApplicationContext，即应用上下文来加载Xml后获取对象的，所以我们第一步先定义一个ApplicaitionContext的接口（为什么要定义成接口，主要是为了类的设计--单一职责原则）
+> 因为我们使用Spring的Xml注入的时候，我们是通过ApplicationContext，即应用上下文来加载Xml后获取对象的，所以我们第一步先定义一个ApplicationContext的接口（为什么要定义成接口，主要是为了类的设计--单一职责原则）
 
 ```java
 public interface ApplicationContext{
     /**
      * 根据类名获取对象，即ByClass
-     * @param clazz
-     * @return
-     * @throws Exception
+     * @param clazz class
+     * @return object
+     * @throws Exception errors
      */
     Object getBean(Class clazz) throws Exception;
 
     /**
      * 根据名字获取对象，即ByName
-     * @param beanName
-     * @return
-     * @throws Exception
+     * @param beanName name
+     * @return object
+     * @throws Exception errors
      */
     Object getBean(String beanName) throws Exception;
 }
@@ -42,7 +42,7 @@ public interface ApplicationContext{
 
 ####  定义AbstractApplicationContext
 
-> 这里实现得就有点像代理模式了，并且也要引入一个BeanFactory，因为我们获取的对象都在BeanFatory里面构造，说到这里，我们可能会想到了部分原理，即ApplicationContext传入一个XML文件----XML文件转换为Resource流-----初始化工厂------读取Resource流中配置信息到BeanDefinition-----注册到工厂类----由之前的工厂类创建Bean对象，并且设置各种属性等
+> 这里实现得就有点像代理模式了，并且也要引入一个BeanFactory，因为我们获取的对象都在BeanFactory里面构造，说到这里，我们可能会想到了部分原理，即ApplicationContext传入一个XML文件----XML文件转换为Resource流-----初始化工厂------读取Resource流中配置信息到BeanDefinition-----注册到工厂类----由之前的工厂类创建Bean对象，并且设置各种属性等
 ```java
 public class AbstractApplicationContext implements ApplicationContext{
     public BeanFactory beanFactory;  //工厂类，实现了工厂模式
@@ -125,7 +125,7 @@ public class BeanDefinition {
 public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
     private final Object startupShutdownMonitor = new Object();
-    private String location;
+    private final String location;
 
     public ClassPathXmlApplicationContext(String location) throws Exception {
         super();
@@ -169,77 +169,74 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
-    public XmlBeanDefinitionReader(ResourceLoader resourceLoader) {
-        super(resourceLoader);
-    }
+  public XmlBeanDefinitionReader(ResourceLoader resourceLoader) {
+    super(resourceLoader);
+  }
 
-    @Override
-    public void loadBeanDefinitions(String location) throws Exception {
-        InputStream inputStream = getResourceLoader().getResource(location).getInputStream();
-        doLoadBeanDefinitions(inputStream);
-    }
+  @Override
+  public void loadBeanDefinitions(String location) throws Exception {
+    InputStream inputStream = getResourceLoader().getResource(location).getInputStream();
+    doLoadBeanDefinitions(inputStream);
+  }
 
-    protected void doLoadBeanDefinitions(InputStream inputStream) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document document = documentBuilder.parse(inputStream);
-        // 解析xml document并注册bean
-        registerBeanDefinitions(document);
-        inputStream.close();
-    }
+  protected void doLoadBeanDefinitions(InputStream inputStream) throws Exception {
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+    Document document = documentBuilder.parse(inputStream);
+    // 解析xml document并注册bean
+    registerBeanDefinitions(document);
+    inputStream.close();
+  }
 
-    public void registerBeanDefinitions(Document document) {
-        Element root = document.getDocumentElement();
-        // 从文件根递归解析
-        parseBeanDefinitions(root);
-    }
+  public void registerBeanDefinitions(Document document) {
+    Element root = document.getDocumentElement();
+    // 从文件根递归解析
+    parseBeanDefinitions(root);
+  }
 
-    protected void parseBeanDefinitions(Element root) {
-        NodeList nodeList = root.getChildNodes();
-        for(int i = 0; i < nodeList.getLength(); i ++) {
-            Node node = nodeList.item(i);
-            if(node instanceof Element) {
-                processBeanDefinition((Element) node);
-            }
+  protected void parseBeanDefinitions(Element root) {
+    NodeList nodeList = root.getChildNodes();
+    for (int i = 0; i < nodeList.getLength(); i++) {
+      Node node = nodeList.item(i);
+      if (node instanceof Element) {
+        processBeanDefinition((Element) node);
+      }
+    }
+  }
+
+  protected void processBeanDefinition(Element ele) {
+    String name = ele.getAttribute("id");
+    String className = ele.getAttribute("class");
+    boolean singleton = !ele.hasAttribute("scope") || !"prototype".equals(ele.getAttribute("scope"));
+    BeanDefinition beanDefinition = new BeanDefinition();
+    processProperty(ele, beanDefinition);
+    beanDefinition.setBeanClassName(className);
+    beanDefinition.setSingleton(singleton);
+    getRegistry().put(name, beanDefinition);
+  }
+
+  private void processProperty(Element ele, BeanDefinition beanDefinition) {
+    NodeList propertyNode = ele.getElementsByTagName("property");
+    for (int i = 0; i < propertyNode.getLength(); i++) {
+      Node node = propertyNode.item(i);
+      if (node instanceof Element) {
+        Element propertyEle = (Element) node;
+        String name = propertyEle.getAttribute("name");
+        String value = propertyEle.getAttribute("value");
+        if (value != null && value.length() > 0) {
+          // 优先进行值注入
+          beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
+        } else {
+          String ref = propertyEle.getAttribute("ref");
+          if (ref == null || ref.length() == 0) {
+            throw new IllegalArgumentException("Configuration problem: <property> element for property '" + name + "' must specify a ref or value");
+          }
+          BeanReference beanReference = new BeanReference(ref);
+          beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanReference));
         }
+      }
     }
-
-    protected void processBeanDefinition(Element ele) {
-        String name = ele.getAttribute("id");
-        String className = ele.getAttribute("class");
-        boolean singleton = true;
-        if(ele.hasAttribute("scope") && "prototype".equals(ele.getAttribute("scope"))) {
-            singleton = false;
-        }
-        BeanDefinition beanDefinition = new BeanDefinition();
-        processProperty(ele, beanDefinition);
-        beanDefinition.setBeanClassName(className);
-        beanDefinition.setSingleton(singleton);
-        getRegistry().put(name, beanDefinition);
-    }
-
-    private void processProperty(Element ele, BeanDefinition beanDefinition) {
-        NodeList propertyNode = ele.getElementsByTagName("property");
-        for(int i = 0; i < propertyNode.getLength(); i ++) {
-            Node node = propertyNode.item(i);
-            if(node instanceof Element) {
-                Element propertyEle = (Element) node;
-                String name = propertyEle.getAttribute("name");
-                String value = propertyEle.getAttribute("value");
-                if(value != null && value.length() > 0) {
-                    // 优先进行值注入
-                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
-                } else {
-                    String ref = propertyEle.getAttribute("ref");
-                    if(ref == null || ref.length() == 0) {
-                        throw new IllegalArgumentException("Configuration problem: <property> element for property '" + name + "' must specify a ref or value");
-                    }
-                    BeanReference beanReference = new BeanReference(ref);
-                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, beanReference));
-                }
-            }
-        }
-    }
+  }
 
 }
 ```
@@ -250,7 +247,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 + ClassPathXmlApplication传入xml文件的路径，并且在构造函数中调用refresh方法
 
-+ 在这个方法中由AbstractBeanFactory定义了一个工厂类，并且调用了obtainBeanFatcory方法，在方法中调用了XmlBeanDefinitionReader类，这个类将XML转换成Resource流，并且读取了其中的key和value值，value值就是BeanDefinition
++ 在这个方法中由AbstractBeanFactory定义了一个工厂类，并且调用了obtainBeanFactory方法，在方法中调用了XmlBeanDefinitionReader类，这个类将XML转换成Resource流，并且读取了其中的key和value值，value值就是BeanDefinition
 
 + 由AutowiredCapableBeanFactory（自动装配工厂类）定义一个工厂，将上述的Key和Value注册到工厂中并且返回到上面定义的工厂类，即将BeanDefinition注册到工厂类中
 
