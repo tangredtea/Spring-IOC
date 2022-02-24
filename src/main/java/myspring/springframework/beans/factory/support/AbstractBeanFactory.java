@@ -1,6 +1,7 @@
 package myspring.springframework.beans.factory.support;
 
 import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.factory.FactoryBean;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 import myspring.springframework.beans.factory.config.BeanPostProcessor;
 import myspring.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * @author Ryan
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     /** ClassLoader to resolve bean class names with, if necessary */
     private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
@@ -72,9 +73,24 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     protected <T> T doGetBean(final String name, final Object[] args){
         Object bean = getSingleton(name);
         if (bean != null){
-            return (T) bean;
+            // 如果是FactoryBean，则需要调用FactoryBean
+            return (T) getObjectForBeanInstance(bean, name);
         }
-        return (T) createBean(name, getBeanDefinition(name), args);
+        BeanDefinition beanDefinition = getBeanDefinition(name);
+        Object o = createBean(name, beanDefinition, args);
+        return (T) getObjectForBeanInstance(o, name);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName){
+        if (!(beanInstance instanceof FactoryBean)){
+            return beanInstance;
+        }
+        Object object = getCachedObjectForFactoryBean(beanName);
+        if (object == null){
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
     }
 
     /**

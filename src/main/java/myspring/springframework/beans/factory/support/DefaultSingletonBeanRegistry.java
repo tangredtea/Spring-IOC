@@ -15,6 +15,8 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     private final Map<String, Object> singletonObjects = new HashMap<>();
 
+    protected static final Object NULL_OBJECT = new Object();
+
     private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
 
     /**
@@ -49,5 +51,10 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
                 throw new BeansException("Destroy method on bean with name '" + beanName + "' threw an exception", e);
             }
         }
+    }
+
+    @Override
+    public void registerSingleton(String beanName, Object singletonObject){
+        singletonObjects.put(beanName, singletonObject);
     }
 }
