@@ -1,6 +1,6 @@
 package myspring.springframework.context.support;
 
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 
 /**
  * @author Ryan

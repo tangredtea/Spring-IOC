@@ -1,7 +1,7 @@
 package myspring.springframework.beans.factory.config;
 
 import myspring.springframework.beans.factory.ConfigurableListableBeanFactory;
-import myspring.springframework.beans.factory.PropertyValues;
+import myspring.springframework.beans.PropertyValues;
 
 /**
  * @author Ryan

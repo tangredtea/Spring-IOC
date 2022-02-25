@@ -3,9 +3,10 @@ package myspring.springframework.aop.framework.autoproxy;
 import myspring.springframework.aop.*;
 import myspring.springframework.aop.aspectj.AspectjExpressionPointcutAdvisor;
 import myspring.springframework.aop.framework.ProxyFactory;
+import myspring.springframework.beans.PropertyValues;
 import myspring.springframework.beans.factory.BeanFactory;
 import myspring.springframework.beans.factory.BeanFactoryAware;
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import myspring.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.aopalliance.aop.Advice;
@@ -98,5 +99,23 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             return new ProxyFactory(advisedSupport).getProxy();
         }
         return null;
+    }
+
+    /**
+     * Post-process the given property values before the factory applies them
+     * to the given bean. Allows for checking whether all dependencies have been
+     * satisfied, for example based on a "Required" annotation on bean property setters.
+     * <p>
+     * 在 Bean 对象实例化完成后，设置属性操作之前执行此方法
+     *
+     * @param pvs
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException {
+        return pvs;
     }
 }

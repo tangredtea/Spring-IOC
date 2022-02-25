@@ -1,13 +1,20 @@
 package myspring.springframework.beans.factory;
 
+import myspring.springframework.beans.BeansException;
+import myspring.springframework.beans.PropertyValue;
+import myspring.springframework.beans.PropertyValues;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 import myspring.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import myspring.springframework.core.io.DefaultResourceLoader;
 import myspring.springframework.core.io.Resource;
+import myspring.springframework.util.StringValueResolver;
 
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * @author Ryan
+ */
 public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
 
     public static final String DEFAULT_PLACEHOLDER_PREFIX = "${";
@@ -25,39 +32,73 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        try{
-            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-            Resource resource = defaultResourceLoader.getResource(location);
+        try {
+            // 加载属性文件
+            DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+            Resource resource = resourceLoader.getResource(location);
+
+            // 占位符替换属性值
             Properties properties = new Properties();
             properties.load(resource.getInputStream());
+
             String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
-            for (String beanDefinitionName : beanDefinitionNames) {
-                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+            for (String beanName : beanDefinitionNames) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+
                 PropertyValues propertyValues = beanDefinition.getPropertyValues();
                 for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
                     Object value = propertyValue.getValue();
-                    if (!(value instanceof String)){
+                    if (!(value instanceof String)) {
                         continue;
                     }
-                    String strVal = (String) value;
-                    StringBuilder stringBuilder = new StringBuilder(strVal);
-                    int start = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
-                    int stop = strVal.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
-                    if (start != -1 && stop != -1 && start < stop){
-                        String propKey = strVal.substring(start + 2, stop);
-                        String propVal = properties.getProperty(propKey);
-                        stringBuilder.replace(start, stop + 1, propVal);
-                        propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), stringBuilder.toString()));
-                    }
+                    value = resolvePlaceholder((String) value, properties);
+                    propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), value));
                 }
             }
-        }catch (IOException e){
+
+            // 向容器中添加字符串解析器，供解析@Value注解使用
+            StringValueResolver valueResolver = new PlaceholderResolvingStringValueResolver(properties);
+            beanFactory.addEmbeddedValueResolver(valueResolver);
+
+        } catch (IOException e) {
             throw new BeansException("Could not load properties", e);
         }
+    }
+
+    private String resolvePlaceholder(String value, Properties properties) {
+        String strVal = value;
+        StringBuilder buffer = new StringBuilder(strVal);
+        int startIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
+        int stopIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
+        if (startIdx != -1 && stopIdx != -1 && startIdx < stopIdx) {
+            String propKey = strVal.substring(startIdx + 2, stopIdx);
+            String propVal = properties.getProperty(propKey);
+            buffer.replace(startIdx, stopIdx + 1, propVal);
+        }
+        return buffer.toString();
     }
 
     public void setLocation(String location){
         this.location = location;
     }
 
+    private class PlaceholderResolvingStringValueResolver implements StringValueResolver{
+
+        private final Properties properties;
+
+        private PlaceholderResolvingStringValueResolver(Properties properties) {
+            this.properties = properties;
+        }
+
+        /**
+         * 解析字符串接口
+         *
+         * @param strVal 字符串
+         * @return value
+         */
+        @Override
+        public String resolveStringValue(String strVal) {
+            return PropertyPlaceholderConfigurer.this.resolvePlaceholder(strVal, properties);
+        }
+    }
 }

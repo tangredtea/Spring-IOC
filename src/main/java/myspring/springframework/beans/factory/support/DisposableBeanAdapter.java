@@ -1,7 +1,7 @@
 package myspring.springframework.beans.factory.support;
 
 import cn.hutool.core.util.StrUtil;
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.DisposableBean;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 

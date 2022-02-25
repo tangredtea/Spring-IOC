@@ -1,5 +1,7 @@
 package myspring.springframework.beans.factory;
 
+import myspring.springframework.beans.BeansException;
+
 /**
  * @author Ryan
  */

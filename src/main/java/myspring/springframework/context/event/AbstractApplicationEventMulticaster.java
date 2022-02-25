@@ -2,7 +2,7 @@ package myspring.springframework.context.event;
 
 import myspring.springframework.beans.factory.BeanFactory;
 import myspring.springframework.beans.factory.BeanFactoryAware;
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 import myspring.springframework.context.AbstractApplicationEvent;
 import myspring.springframework.context.ApplicationListener;
 import myspring.springframework.util.ClassUtils;

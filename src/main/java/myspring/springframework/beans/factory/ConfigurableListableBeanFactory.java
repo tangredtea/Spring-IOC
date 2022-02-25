@@ -1,5 +1,6 @@
 package myspring.springframework.beans.factory;
 
+import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 import myspring.springframework.beans.factory.config.BeanPostProcessor;

@@ -1,6 +1,6 @@
 package myspring.springframework.beans.factory.support;
 
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;

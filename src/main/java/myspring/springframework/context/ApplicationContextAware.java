@@ -1,7 +1,7 @@
 package myspring.springframework.context;
 
 import myspring.springframework.beans.factory.Aware;
-import myspring.springframework.beans.factory.BeansException;
+import myspring.springframework.beans.BeansException;
 
 /**
  * @author Ryan
