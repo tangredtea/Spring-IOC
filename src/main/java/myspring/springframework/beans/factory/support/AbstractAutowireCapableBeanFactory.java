@@ -2,10 +2,7 @@ package myspring.springframework.beans.factory.support;
 
 import cn.hutool.core.util.StrUtil;
 import myspring.springframework.beans.factory.*;
-import myspring.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import myspring.springframework.beans.factory.config.BeanDefinition;
-import myspring.springframework.beans.factory.config.BeanPostProcessor;
-import myspring.springframework.beans.factory.config.BeanReference;
+import myspring.springframework.beans.factory.config.*;
 import cn.hutool.core.bean.BeanUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -30,6 +27,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean;
         try{
+            // 判断是否返回代理对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (null != bean){
+                return bean;
+            }
             bean = createBeanInstance(beanDefinition, beanName, args);
             // 属性赋值
             applyPropertyValues(beanName, bean, beanDefinition);
@@ -44,6 +46,25 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return bean;
     }
 
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
     private void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
         try{
             PropertyValues propertyValues = beanDefinition.getPropertyValues();
