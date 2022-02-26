@@ -5,8 +5,10 @@ import myspring.springframework.beans.factory.FactoryBean;
 import myspring.springframework.beans.factory.config.BeanDefinition;
 import myspring.springframework.beans.factory.config.BeanPostProcessor;
 import myspring.springframework.beans.factory.config.ConfigurableBeanFactory;
+import myspring.springframework.core.convert.ConversionService;
 import myspring.springframework.util.ClassUtils;
 import myspring.springframework.util.StringValueResolver;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,8 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
+
+    private ConversionService conversionService;
 
     /**
      * 获取bean
@@ -144,5 +148,16 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
             result = resolver.resolveStringValue(result);
         }
         return result;
+    }
+
+    @Nullable
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    @Override
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
     }
 }

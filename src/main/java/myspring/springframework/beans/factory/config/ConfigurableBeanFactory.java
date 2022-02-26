@@ -1,7 +1,9 @@
 package myspring.springframework.beans.factory.config;
 
 import myspring.springframework.beans.factory.HierarchicalBeanFactory;
+import myspring.springframework.core.convert.ConversionService;
 import myspring.springframework.util.StringValueResolver;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Ryan
@@ -37,4 +39,18 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
      * @since 3.0
      */
     String resolveEmbeddedValue(String value);
+
+
+    /**
+     * 设置类型转换服务
+     * @param conversionService service
+     */
+    void setConversionService(ConversionService conversionService);
+
+    /**
+     * 返回类型转换服务
+     * @return conversionService
+     */
+    @Nullable
+    ConversionService getConversionService();
 }

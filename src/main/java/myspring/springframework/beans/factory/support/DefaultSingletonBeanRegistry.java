@@ -7,13 +7,27 @@ import myspring.springframework.beans.factory.config.SingletonBeanRegistry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Ryan
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
-    private final Map<String, Object> singletonObjects = new HashMap<>();
+    /**
+     * 一级缓存，普通对象
+     */
+    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
+
+    /**
+     * 二级缓存，提前暴露的对象，没有完全实例化的对象
+     */
+    private final Map<String, Object> earlySingletonObjects = new HashMap<>();
+
+    /**
+     * 三级缓存，存放代理对象
+     */
+    private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>();
 
     protected static final Object NULL_OBJECT = new Object();
 
@@ -27,7 +41,26 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
      */
     @Override
     public Object getSingleton(String beanName) {
-        return singletonObjects.get(beanName);
+        Object o = singletonObjects.get(beanName);
+        if (null == o){
+            o = earlySingletonObjects.get(beanName);
+            if (null == o){
+                ObjectFactory<?> objectFactory = singletonFactories.get(beanName);
+                if (objectFactory != null){
+                    o = objectFactory.getObject();
+                    earlySingletonObjects.put(beanName, o);
+                    singletonFactories.remove(beanName);
+                }
+            }
+        }
+        return o;
+    }
+
+    protected void addSingletonFactory(String beanName, ObjectFactory<?> singletonFactory){
+        if (!this.singletonObjects.containsKey(beanName)){
+            this.singletonFactories.put(beanName, singletonFactory);
+            this.earlySingletonObjects.remove(beanName);
+        }
     }
 
     protected void addSingleton(String beanName, Object singleObject){
@@ -56,5 +89,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     @Override
     public void registerSingleton(String beanName, Object singletonObject){
         singletonObjects.put(beanName, singletonObject);
+        earlySingletonObjects.remove(beanName);
+        singletonFactories.remove(beanName);
     }
 }

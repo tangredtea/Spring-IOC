@@ -3,6 +3,7 @@ package myspring.springframework.aop;
 import myspring.springframework.util.ClassUtils;
 
 /**
+ * 用于获取 AOP 调用的当前“目标”，如果没有环绕通知选择结束拦截器链本身，则将通过反射调用该目标。
  * @author Ryan
  */
 public class TargetSource {

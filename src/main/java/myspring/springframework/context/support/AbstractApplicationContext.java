@@ -8,8 +8,10 @@ import myspring.springframework.context.AbstractApplicationEvent;
 import myspring.springframework.context.ApplicationListener;
 import myspring.springframework.context.ConfigurableApplicationContext;
 import myspring.springframework.context.event.ApplicationEventMulticaster;
+import myspring.springframework.context.event.ContextClosedEvent;
 import myspring.springframework.context.event.ContextRefreshedEvent;
 import myspring.springframework.context.event.SimpleApplicationEventMulticaster;
+import myspring.springframework.core.convert.ConversionService;
 import myspring.springframework.core.io.DefaultResourceLoader;
 
 import java.util.Collection;
@@ -48,10 +50,26 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         registerListeners();
 
         // 8. 提前实例化单例Bean对象
-        beanFactory.preInstantiateSingletons();
-
+        finishBeanFactoryInitialization(beanFactory);
         // 9. 发布容器刷新完成事件
         finishRefresh();
+    }
+
+    /**
+     * 设置类型转换器
+     * @param beanFactory 工厂
+     */
+    protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+        // 设置类型转换器
+        if (beanFactory.containsBean("conversionService")) {
+            Object conversionService = beanFactory.getBean("conversionService");
+            if (conversionService instanceof ConversionService) {
+                beanFactory.setConversionService((ConversionService) conversionService);
+            }
+        }
+
+        // 提前实例化单例Bean对象
+        beanFactory.preInstantiateSingletons();
     }
 
     private void finishRefresh() {
@@ -84,11 +102,25 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         Runtime.getRuntime().addShutdownHook(new Thread(this::close));
     }
 
+    @Override
+    public <T> T getBean(Class<T> requiredType) throws BeansException {
+        return getBeanFactory().getBean(requiredType);
+    }
+
+    @Override
+    public boolean containsBean(String name) {
+        return getBeanFactory().containsBean(name);
+    }
+
     /**
      * 手动关闭逻辑
      */
     @Override
     public void close() {
+        // 发布容器关闭事件
+        publishEvent(new ContextClosedEvent(this));
+
+        // 执行销毁单例bean的销毁方法
         getBeanFactory().destroySingletons();
     }
 

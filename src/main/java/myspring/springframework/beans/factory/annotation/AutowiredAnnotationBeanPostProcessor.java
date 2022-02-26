@@ -1,10 +1,12 @@
 package myspring.springframework.beans.factory.annotation;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.TypeUtil;
 import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.PropertyValues;
 import myspring.springframework.beans.factory.*;
 import myspring.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
+import myspring.springframework.core.convert.ConversionService;
 import myspring.springframework.util.ClassUtils;
 
 import java.lang.reflect.Field;
@@ -32,8 +34,17 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
         for (Field field : declaredFields) {
             Value valueAnnotation = field.getAnnotation(Value.class);
             if (null != valueAnnotation) {
-                String value = valueAnnotation.value();
-                value = beanFactory.resolveEmbeddedValue(value);
+                Object value = valueAnnotation.value();
+                value = beanFactory.resolveEmbeddedValue((String) value);
+                // 类型转换
+                Class<?> aClass = value.getClass();
+                Class<?> targetType = (Class<?>) TypeUtil.getType(field);
+                ConversionService conversionService = beanFactory.getConversionService();
+                if (conversionService != null){
+                    if (conversionService.canConvert(aClass, targetType)){
+                        value = conversionService.convert(value, targetType);
+                    }
+                }
                 BeanUtil.setFieldValue(bean, field.getName(), value);
             }
         }
@@ -43,9 +54,9 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
             Autowired autowiredAnnotation = field.getAnnotation(Autowired.class);
             if (null != autowiredAnnotation) {
                 Class<?> fieldType = field.getType();
-                String dependentBeanName = null;
+                String dependentBeanName;
                 Qualifier qualifierAnnotation = field.getAnnotation(Qualifier.class);
-                Object dependentBean = null;
+                Object dependentBean;
                 if (null != qualifierAnnotation) {
                     dependentBeanName = qualifierAnnotation.value();
                     dependentBean = beanFactory.getBean(dependentBeanName, fieldType);
@@ -69,9 +80,14 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
         return null;
     }
 
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         return null;
     }
 
+    @Override
+    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        return true;
+    }
 }

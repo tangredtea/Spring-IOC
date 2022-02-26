@@ -5,6 +5,7 @@ import myspring.springframework.aop.PointcutAdvisor;
 import org.aopalliance.aop.Advice;
 
 /**
+ * 可用于任何 AspectJ 切入点表达式的 Spring AOP Advisor。
  * @author Ryan
  */
 public class AspectjExpressionPointcutAdvisor implements PointcutAdvisor {

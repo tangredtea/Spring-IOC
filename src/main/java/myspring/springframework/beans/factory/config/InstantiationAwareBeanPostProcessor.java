@@ -9,7 +9,7 @@ import myspring.springframework.beans.BeansException;
 public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor{
 
     /**
-     * 初始化bean处理
+     * 实例化bean前处理
      * @param beanClass class
      * @param beanName 对象名
      * @return 对象
@@ -31,4 +31,31 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor{
      * @throws BeansException
      */
     PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException;
+
+
+    /**
+     * Perform operations after the bean has been instantiated, via a constructor or factory method,
+     * but before Spring property population (from explicit properties or autowiring) occurs.
+     * <p>This is the ideal callback for performing field injection on the given bean instance.
+     * See Spring's own
+     * for a typical example.
+     * <p>
+     * 在 Bean 对象执行初始化方法之后，执行此方法
+     *
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException;
+
+    /**
+     * 在 Spring 中由 SmartInstantiationAwareBeanPostProcessor#getEarlyBeanReference 提供
+     * @param bean bean对象
+     * @param beanName bean名字
+     * @return object
+     */
+    default Object getEarlyBeanReference(Object bean, String beanName) {
+        return bean;
+    }
 }

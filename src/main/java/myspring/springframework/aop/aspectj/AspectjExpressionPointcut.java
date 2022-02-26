@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * 切点表达式
+ * 使用 AspectJ 编织器来评估切入点表达式。
  * @author Ryan
  */
 public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
@@ -52,7 +54,7 @@ public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     /**
-     * 过滤class
+     * class过滤器
      *
      * @return filter
      */

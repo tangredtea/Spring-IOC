@@ -1,6 +1,7 @@
 package myspring.springframework.aop;
 
 /**
+ * 核心 Spring 切入点抽象
  * @author Ryan
  */
 public interface Pointcut {

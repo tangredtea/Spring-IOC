@@ -3,7 +3,10 @@ package myspring.springframework.beans.factory.support;
 import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.ConfigurableListableBeanFactory;
 import myspring.springframework.beans.factory.config.BeanDefinition;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -76,5 +79,39 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     @Override
     public void preInstantiateSingletons() throws BeansException {
         beanDefinitionMap.keySet().forEach(this::getBean);
+    }
+
+    /**
+     * 由class得到bean
+     *
+     * @param requiredType class
+     * @return bean
+     * @throws BeansException 异常
+     */
+    @Override
+    public <T> T getBean(Class<T> requiredType) throws BeansException {
+        List<String> beanNames = new ArrayList<>();
+        for (Map.Entry<String, BeanDefinition> entry : beanDefinitionMap.entrySet()) {
+            Class beanClass = entry.getValue().getBeanClass();
+            if (requiredType.isAssignableFrom(beanClass)) {
+                beanNames.add(entry.getKey());
+            }
+        }
+        if (1 == beanNames.size()) {
+            return getBean(beanNames.get(0), requiredType);
+        }
+
+        throw new BeansException(requiredType + "expected single bean but found " + beanNames.size() + ": " + beanNames);
+    }
+
+    /**
+     * 判断是否包含bean
+     *
+     * @param name bean名字
+     * @return 布尔值
+     */
+    @Override
+    public boolean containsBean(String name) {
+        return beanDefinitionMap.containsKey(name);
     }
 }

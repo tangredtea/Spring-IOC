@@ -8,6 +8,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 /**
+ *  CGLIB 反射
  * @author Ryan
  */
 public class Cglib2AopProxy implements AopProxy{
