@@ -1,5 +1,7 @@
 package myspring.springframework.aop;
 
+import myspring.springframework.util.ClassUtils;
+
 /**
  * @author Ryan
  */
@@ -16,6 +18,9 @@ public class TargetSource {
     }
 
     public Class<?>[] getTargetClass(){
-        return this.target.getClass().getInterfaces();
+        Class<?> aClass = this.target.getClass();
+        aClass = ClassUtils.isCglibProxyClass(aClass) ? aClass.getSuperclass() : aClass;
+        return aClass.getInterfaces();
     }
+
 }

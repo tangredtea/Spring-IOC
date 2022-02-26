@@ -48,6 +48,29 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        Class<?> beanClass = bean.getClass();
+        if (isInfrastructureClass(beanClass)){
+            return null;
+        }
+        Collection<AspectjExpressionPointcutAdvisor> values = beanFactory.getBeansOfType(AspectjExpressionPointcutAdvisor.class).values();
+        for (AspectjExpressionPointcutAdvisor value : values) {
+            ClassFilter classFilter = value.getPointcut().getClassFilter();
+            if (!classFilter.matches(beanClass)){
+                continue;
+            }
+            AdvisedSupport advisedSupport = new AdvisedSupport();
+            TargetSource targetSource = null;
+            try{
+                targetSource = new TargetSource(beanClass.getDeclaredConstructor().newInstance());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            advisedSupport.setTargetSource(targetSource);
+            advisedSupport.setMethodInterceptor((MethodInterceptor) value.getAdvice());
+            advisedSupport.setMethodMatcher(value.getPointcut().getMethodMatcher());
+            advisedSupport.setProxyTargetClass(false);
+            return new ProxyFactory(advisedSupport).getProxy();
+        }
         return bean;
     }
 
@@ -76,28 +99,6 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
      */
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-        if (isInfrastructureClass(beanClass)){
-            return null;
-        }
-        Collection<AspectjExpressionPointcutAdvisor> values = beanFactory.getBeansOfType(AspectjExpressionPointcutAdvisor.class).values();
-        for (AspectjExpressionPointcutAdvisor value : values) {
-            ClassFilter classFilter = value.getPointcut().getClassFilter();
-            if (!classFilter.matches(beanClass)){
-                continue;
-            }
-            AdvisedSupport advisedSupport = new AdvisedSupport();
-            TargetSource targetSource = null;
-            try{
-                targetSource = new TargetSource(beanClass.getDeclaredConstructor().newInstance());
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            advisedSupport.setTargetSource(targetSource);
-            advisedSupport.setMethodInterceptor((MethodInterceptor) value.getAdvice());
-            advisedSupport.setMethodMatcher(value.getPointcut().getMethodMatcher());
-            advisedSupport.setProxyTargetClass(false);
-            return new ProxyFactory(advisedSupport).getProxy();
-        }
         return null;
     }
 
