@@ -15,17 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     /**
-     * 一级缓存，普通对象
+     * First-level cache: fully initialized singleton objects
      */
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
     /**
-     * 二级缓存，提前暴露的对象，没有完全实例化的对象
+     * Second-level cache: early-exposed objects that are not yet fully initialized
      */
     private final Map<String, Object> earlySingletonObjects = new HashMap<>();
 
     /**
-     * 三级缓存，存放代理对象
+     * Third-level cache: singleton factories for creating proxy objects
      */
     private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>();
 
@@ -34,10 +34,10 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
 
     /**
-     * 得到单例对象
+     * Get the singleton object for the given bean name
      *
-     * @param beanName 单例对象名
-     * @return object
+     * @param beanName the name of the singleton bean
+     * @return the singleton object, or null if not found
      */
     @Override
     public Object getSingleton(String beanName) {
@@ -65,6 +65,8 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     protected void addSingleton(String beanName, Object singleObject){
         singletonObjects.put(beanName, singleObject);
+        earlySingletonObjects.remove(beanName);
+        singletonFactories.remove(beanName);
     }
 
     public void registerDisposableBean(String beanName, DisposableBean bean) {

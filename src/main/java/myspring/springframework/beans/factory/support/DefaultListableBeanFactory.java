@@ -17,11 +17,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     private final Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
     /**
-     * 得到bean定义
+     * Get the bean definition
      *
-     * @param beanName 名字
+     * @param beanName bean name
      * @return beanDefinition
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public BeanDefinition getBeanDefinition(String beanName) throws BeansException {
@@ -45,10 +45,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     /**
-     * 判断是否包含指定名称的BeanDefinition
+     * Check whether a BeanDefinition with the specified name exists
      *
-     * @param beanName 名字
-     * @return 布尔值
+     * @param beanName bean name
+     * @return boolean
      */
     @Override
     public boolean containsBeanDefinition(String beanName) {
@@ -56,9 +56,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     /**
-     * 返回注册表中的所有names
+     * Return all bean names in the registry
      *
-     * @return name
+     * @return bean names
      */
     @Override
     public String[] getBeanDefinitionNames() {
@@ -66,10 +66,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     /**
-     * 向注册表中注册 BeanDefinition
+     * Register a BeanDefinition in the registry
      *
-     * @param beanName       名字
-     * @param beanDefinition 定义
+     * @param beanName       bean name
+     * @param beanDefinition bean definition
      */
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
@@ -82,11 +82,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     /**
-     * 由class得到bean
+     * Get a bean by its class type
      *
-     * @param requiredType class
+     * @param requiredType required class type
      * @return bean
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public <T> T getBean(Class<T> requiredType) throws BeansException {
@@ -105,10 +105,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     /**
-     * 判断是否包含bean
+     * Check whether a bean with the specified name exists
      *
-     * @param name bean名字
-     * @return 布尔值
+     * @param name bean name
+     * @return boolean
      */
     @Override
     public boolean containsBean(String name) {

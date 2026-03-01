@@ -12,44 +12,44 @@ import java.io.IOException;
 public interface BeanDefinitionReader {
 
     /**
-     * 得到注册表
+     * Get the bean definition registry
      * @return beanDefinitionRegistry
      */
     BeanDefinitionRegistry getRegistry();
 
     /**
-     * 得到资源加载器
+     * Get the resource loader
      * @return resourceLoader
      */
     ResourceLoader getResourceLoader();
 
     /**
-     * 加载资源
-     * @param resource 资源
-     * @throws BeansException 异常
-     * @throws IOException 异常
+     * Load bean definitions from the given resource
+     * @param resource the resource to load from
+     * @throws BeansException if an error occurs while loading bean definitions
+     * @throws IOException if an I/O error occurs
      */
     void loadBeanDefinitions(Resource resource) throws BeansException, IOException;
 
     /**
-     * 加载资源
-     * @param resources 资源
-     * @throws BeansException 异常
-     * @throws IOException 异常
+     * Load bean definitions from multiple resources
+     * @param resources the resources to load from
+     * @throws BeansException if an error occurs while loading bean definitions
+     * @throws IOException if an I/O error occurs
      */
     void loadBeanDefinitions(Resource... resources) throws BeansException, IOException;
 
     /**
-     * 从指定路径加载
-     * @param location 路径
-     * @throws BeansException 异常
+     * Load bean definitions from the specified location
+     * @param location the resource location
+     * @throws BeansException if an error occurs while loading bean definitions
      */
     void loadBeanDefinitions(String location) throws BeansException;
 
     /**
-     * 多文件加载
-     * @param locations 位置
-     * @throws BeansException 异常
+     * Load bean definitions from multiple locations
+     * @param locations the resource locations
+     * @throws BeansException if an error occurs while loading bean definitions
      */
     void loadBeanDefinitions(String... locations) throws BeansException;
 

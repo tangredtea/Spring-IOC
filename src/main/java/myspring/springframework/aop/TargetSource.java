@@ -3,7 +3,8 @@ package myspring.springframework.aop;
 import myspring.springframework.util.ClassUtils;
 
 /**
- * 用于获取 AOP 调用的当前“目标”，如果没有环绕通知选择结束拦截器链本身，则将通过反射调用该目标。
+ * Used to obtain the current “target” of an AOP invocation, which will be invoked via reflection
+ * if no around advice chooses to end the interceptor chain itself.
  * @author Ryan
  */
 public class TargetSource {

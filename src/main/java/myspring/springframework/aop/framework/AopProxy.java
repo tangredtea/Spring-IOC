@@ -1,14 +1,16 @@
 package myspring.springframework.aop.framework;
 
 /**
- *  AOP 代理的抽象
+ * Delegate interface for creating AOP proxies.
+ *
  * @author Ryan
  */
 public interface AopProxy {
 
     /**
-     * 得到代理类
-     * @return object
+     * Create a new proxy object.
+     *
+     * @return the proxy object
      */
     Object getProxy();
 

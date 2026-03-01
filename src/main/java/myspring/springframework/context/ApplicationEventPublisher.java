@@ -6,8 +6,8 @@ package myspring.springframework.context;
 public interface ApplicationEventPublisher {
 
     /**
-     * 发布事件
-     * @param event 事件
+     * Publish an event
+     * @param event the event
      */
     void publishEvent(AbstractApplicationEvent event);
 

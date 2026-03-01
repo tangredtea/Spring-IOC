@@ -6,6 +6,8 @@ import myspring.springframework.util.StringValueResolver;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * Configuration interface to be implemented by most bean factories.
+ *
  * @author Ryan
  */
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
@@ -15,41 +17,43 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
     String SCOPE_PROTOTYPE = "prototype";
 
     /**
-     * 添加对象处理
-     * @param beanPostProcessor 对象处理器
+     * Add a BeanPostProcessor that will get applied to beans created by this factory.
+     *
+     * @param beanPostProcessor the post-processor to register
      */
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
     /**
-     * 销毁对象
+     * Destroy all singleton beans in this factory.
      */
     void destroySingletons();
 
     /**
      * Add a String resolver for embedded values such as annotation attributes.
+     *
      * @param valueResolver the String resolver to apply to embedded values
-     * @since 3.0
      */
     void addEmbeddedValueResolver(StringValueResolver valueResolver);
 
     /**
      * Resolve the given embedded value, e.g. an annotation attribute.
+     *
      * @param value the value to resolve
      * @return the resolved value (may be the original value as-is)
-     * @since 3.0
      */
     String resolveEmbeddedValue(String value);
 
-
     /**
-     * 设置类型转换服务
-     * @param conversionService service
+     * Set the type conversion service to use for converting property values.
+     *
+     * @param conversionService the ConversionService to use
      */
     void setConversionService(ConversionService conversionService);
 
     /**
-     * 返回类型转换服务
-     * @return conversionService
+     * Return the associated ConversionService, if any.
+     *
+     * @return the ConversionService, or {@code null} if none
      */
     @Nullable
     ConversionService getConversionService();

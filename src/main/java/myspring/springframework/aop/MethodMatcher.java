@@ -3,15 +3,17 @@ package myspring.springframework.aop;
 import java.lang.reflect.Method;
 
 /**
- * 检查目标方法是否有资格获得通知。
+ * Part of a Pointcut: checks whether the target method is eligible for advice.
+ *
  * @author Ryan
  */
 public interface MethodMatcher {
     /**
-     * 执行静态检查给定方法是否匹配。
-     * @param method 方法
-     * @param targetClass 目标class
-     * @return 布尔值
+     * Perform static checking whether the given method matches.
+     *
+     * @param method      the candidate method
+     * @param targetClass the target class
+     * @return whether this method matches statically
      */
     boolean matches(Method method, Class<?> targetClass);
 }

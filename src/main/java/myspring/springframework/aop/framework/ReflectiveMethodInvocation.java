@@ -11,17 +11,17 @@ import java.lang.reflect.Method;
 public class ReflectiveMethodInvocation implements MethodInvocation {
 
     /**
-     * 目标对象
+     * Target object
      */
     protected final Object target;
 
     /**
-     * 方法
+     * Method
      */
     protected final Method method;
 
     /**
-     * 入参
+     * Arguments
      */
     protected final Object[] arguments;
 

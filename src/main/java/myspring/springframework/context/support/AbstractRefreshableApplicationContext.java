@@ -23,8 +23,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
     }
 
     /**
-     * 加载beanDefinitions
-     * @param beanFactory 对象工厂
+     * Load bean definitions into the given bean factory.
+     *
+     * @param beanFactory the bean factory to load bean definitions into
      */
     protected abstract void loadBeanDefinitions(DefaultListableBeanFactory beanFactory);
 

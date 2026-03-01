@@ -10,9 +10,9 @@ import java.net.URL;
  */
 public class DefaultResourceLoader implements ResourceLoader{
     /**
-     * 从路径中get Resource
+     * Get a Resource from the given location path
      *
-     * @param location 路径
+     * @param location the resource location
      * @return resource
      */
     @Override

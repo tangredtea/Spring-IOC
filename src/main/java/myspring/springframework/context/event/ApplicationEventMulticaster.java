@@ -9,20 +9,20 @@ import myspring.springframework.context.ApplicationListener;
 public interface ApplicationEventMulticaster {
 
     /**
-     * 添加监听器
-     * @param listener 监听器
+     * Add a listener
+     * @param listener the listener
      */
     void addApplicationListener(ApplicationListener<?> listener);
 
     /**
-     * 移除监听器
-     * @param listener 监听器
+     * Remove a listener
+     * @param listener the listener
      */
     void removeApplicationListener(ApplicationListener<?> listener);
 
     /**
-     * 广播事件
-     * @param event 事件
+     * Multicast the event
+     * @param event the event
      */
     void multicastEvent(AbstractApplicationEvent event);
 }

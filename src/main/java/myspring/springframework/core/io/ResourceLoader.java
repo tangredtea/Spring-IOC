@@ -8,8 +8,8 @@ public interface ResourceLoader {
     String CLASS_URL_PREFIX = "classpath:";
 
     /**
-     * 从路径中get Resource
-     * @param location 路径
+     * Get a Resource from the given location path
+     * @param location the resource location
      * @return resource
      */
     Resource getResource(String location);

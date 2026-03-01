@@ -7,27 +7,32 @@ import myspring.springframework.beans.factory.config.BeanPostProcessor;
 import myspring.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
+ * Configuration interface to be implemented by most listable bean factories.
+ *
  * @author Ryan
  */
 public interface ConfigurableListableBeanFactory extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory {
 
     /**
-     * 得到beanDefinition
-     * @param beanName beanName
-     * @return beanDefinition
-     * @throws BeansException 异常
+     * Return the BeanDefinition for the given bean name.
+     *
+     * @param beanName the name of the bean
+     * @return the BeanDefinition for the given name
+     * @throws BeansException if no such bean definition is found
      */
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     /**
-     * 提前单例初始化
-     * @throws BeansException 异常
+     * Ensure that all non-lazy-init singletons are instantiated.
+     *
+     * @throws BeansException if any bean could not be created
      */
     void preInstantiateSingletons() throws BeansException;
 
     /**
-     * 添加对象处置器
-     * @param beanPostProcessor 对象处理器
+     * Add a BeanPostProcessor that will get applied to beans created by this factory.
+     *
+     * @param beanPostProcessor the post-processor to register
      */
     @Override
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);

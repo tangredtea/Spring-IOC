@@ -8,9 +8,9 @@ import myspring.springframework.beans.PropertyValues;
  */
 public class BeanDefinition<T> {
 
-    String SCOPE_SINGLETON = ConfigurableListableBeanFactory.SCOPE_SINGLETON;
+    private static final String SCOPE_SINGLETON = ConfigurableListableBeanFactory.SCOPE_SINGLETON;
 
-    String SCOPE_PROTOTYPE = ConfigurableListableBeanFactory.SCOPE_PROTOTYPE;
+    private static final String SCOPE_PROTOTYPE = ConfigurableListableBeanFactory.SCOPE_PROTOTYPE;
 
     private Class<T> beanClass;
 

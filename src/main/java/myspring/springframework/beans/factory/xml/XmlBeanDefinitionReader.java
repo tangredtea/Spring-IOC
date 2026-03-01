@@ -31,10 +31,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     /**
-     * 加载资源
+     * Load bean definitions from a resource
      *
-     * @param resource 资源
-     * @throws BeansException 异常
+     * @param resource the resource
+     * @throws BeansException exception
      */
     @Override
     public void loadBeanDefinitions(Resource resource) throws BeansException {
@@ -48,10 +48,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     /**
-     * 加载多个资源
+     * Load bean definitions from multiple resources
      *
-     * @param resources 资源
-     * @throws BeansException 异常
+     * @param resources the resources
+     * @throws BeansException exception
      */
     @Override
     public void loadBeanDefinitions(Resource... resources) throws BeansException {
@@ -61,10 +61,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     }
 
     /**
-     * 从指定路径加载
+     * Load bean definitions from the specified location
      *
-     * @param location 路径
-     * @throws BeansException 异常
+     * @param location the resource location
+     * @throws BeansException exception
      */
     @Override
     public void loadBeanDefinitions(String location) throws BeansException {
@@ -84,7 +84,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         SAXReader reader = new SAXReader();
         Document document = reader.read(inputStream);
         Element root = document.getRootElement();
-        // 解析 context:component-scan 标签，扫描包中的类并提取相关信息，用于组装 BeanDefinition
+        // Parse the context:component-scan tag, scan classes in the package and extract relevant info to assemble BeanDefinitions
         Element componentScan = root.element("component-scan");
         if (null != componentScan) {
             String scanPath = componentScan.attributeValue("base-package");
@@ -104,15 +104,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String destroyMethodName = bean.attributeValue("destroy-method");
             String beanScope = bean.attributeValue("scope");
 
-            // 获取 Class，方便获取类中的名称
+            // Get the Class to conveniently retrieve the class name
             Class<?> clazz = Class.forName(className);
-            // 优先级 id > name
+            // Priority: id > name
             String beanName = StrUtil.isNotEmpty(id) ? id : name;
             if (StrUtil.isEmpty(beanName)) {
                 beanName = StrUtil.lowerFirst(clazz.getSimpleName());
             }
 
-            // 定义Bean
+            // Define the bean
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
             beanDefinition.setInitMethodName(initMethod);
             beanDefinition.setDestroyMethodName(destroyMethodName);
@@ -122,22 +122,22 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             }
 
             List<Element> propertyList = bean.elements("property");
-            // 读取属性并填充
+            // Read and populate properties
             for (Element property : propertyList) {
-                // 解析标签：property
+                // Parse the property tag
                 String attrName = property.attributeValue("name");
                 String attrValue = property.attributeValue("value");
                 String attrRef = property.attributeValue("ref");
-                // 获取属性值：引入对象、值对象
+                // Get the property value: reference object or value object
                 Object value = StrUtil.isNotEmpty(attrRef) ? new BeanReference(attrRef) : attrValue;
-                // 创建属性信息
+                // Create property information
                 PropertyValue propertyValue = new PropertyValue(attrName, value);
                 beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
             }
             if (getRegistry().containsBeanDefinition(beanName)) {
                 throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
             }
-            // 注册 BeanDefinition
+            // Register the BeanDefinition
             getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
     }

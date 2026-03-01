@@ -1,29 +1,29 @@
-# Spring手写实现笔记
+# Handwritten Spring Implementation Notes
 
-> 本篇文章并不是教你如何基于XML注解实现Spring，仅仅是本人手写实现Spring XML注解注入的时候一点心得，如果发现有错误，还望告知，github链接：https://github.com/laowenruo/Spring-IOC  （目前仅仅实现了XML，之后还会实现其他方式）
+> This article is not a step-by-step tutorial on implementing Spring with XML-based injection. It is simply a collection of insights I gathered while hand-writing an XML-based Spring injection mechanism. If you find any errors, please let me know. GitHub link: https://github.com/laowenruo/Spring-IOC
 
-## 基于XML注解实现
+## XML-Based Injection
 
-### 原理
+### Principles
 
-+ IOC的作用就是把每个bean之间的关系交给第三方容器进行管理，bean的初始化等交给容器处理，即控制反转
++ The purpose of IOC is to delegate the management of relationships between beans to a third-party container. Bean initialization is handled by the container — this is known as Inversion of Control.
 
-+ 所有配置文件只要是配置了全路径，我们就可以理解为其是反射得到的（如：spring.xml中配置的bean中的class属性）
++ Whenever a configuration file specifies a fully qualified class path, we can assume it is resolved via reflection (e.g., the `class` attribute of `<bean>` in `spring.xml`).
 
-+ SpringIOC的XML版本采用的是dom4j+反射技术实现的
++ The XML version of Spring IOC is implemented using dom4j + reflection.
 
-+ 反射的构造对象，肯定会走无参构造函数的。（无论构造函数是否私有）
++ Reflection-based object construction always invokes the no-arg constructor (regardless of its access modifier).
 
-### 核心实现
+### Core Implementation
 
-#### 定义ApplicationContext
+#### Defining ApplicationContext
 
-> 因为我们使用Spring的Xml注入的时候，我们是通过ApplicationContext，即应用上下文来加载Xml后获取对象的，所以我们第一步先定义一个ApplicationContext的接口（为什么要定义成接口，主要是为了类的设计--单一职责原则）
+> When using Spring's XML injection, we obtain objects through the `ApplicationContext` (application context) after loading the XML. So the first step is to define an `ApplicationContext` interface (it's defined as an interface to follow the Single Responsibility Principle).
 
 ```java
 public interface ApplicationContext{
     /**
-     * 根据类名获取对象，即ByClass
+     * Get bean by class
      * @param clazz class
      * @return object
      * @throws Exception errors
@@ -31,7 +31,7 @@ public interface ApplicationContext{
     Object getBean(Class clazz) throws Exception;
 
     /**
-     * 根据名字获取对象，即ByName
+     * Get bean by name
      * @param beanName name
      * @return object
      * @throws Exception errors
@@ -40,12 +40,13 @@ public interface ApplicationContext{
 }
 ```
 
-####  定义AbstractApplicationContext
+#### Defining AbstractApplicationContext
 
-> 这里实现得就有点像代理模式了，并且也要引入一个BeanFactory，因为我们获取的对象都在BeanFactory里面构造，说到这里，我们可能会想到了部分原理，即ApplicationContext传入一个XML文件----XML文件转换为Resource流-----初始化工厂------读取Resource流中配置信息到BeanDefinition-----注册到工厂类----由之前的工厂类创建Bean对象，并且设置各种属性等
+> This is somewhat similar to the Proxy pattern. We also need to introduce a `BeanFactory`, since all objects are constructed within it. At this point, we can see part of the overall flow: `ApplicationContext` receives an XML file path → XML is converted to a `Resource` stream → factory is initialized → `Resource` stream configuration is read into `BeanDefinition` → registered in the factory → factory creates Bean objects and sets their properties.
+
 ```java
 public class AbstractApplicationContext implements ApplicationContext{
-    public BeanFactory beanFactory;  //工厂类，实现了工厂模式
+    public BeanFactory beanFactory;  // Factory class, implementing the Factory pattern
     @Override
    public Object getBean(Class clazz) throws Exception {
         return beanFactory.getBean(clazz);
@@ -57,16 +58,17 @@ public class AbstractApplicationContext implements ApplicationContext{
     }
 }
 ```
-### 定义BeanDefinition
+
+### Defining BeanDefinition
 
 ```java
 
 public class BeanDefinition {
-    private Object bean;  //实例化后的对象
+    private Object bean;  // The instantiated object
     private Class beanClass;
     private String beanClassName;
-    private Boolean singleton; //是否为单例模式
-    private PropertyValues propertyValues;   //这个也就是属性的键值对了
+    private Boolean singleton; // Whether this is a singleton
+    private PropertyValues propertyValues;   // Property key-value pairs
 
     public Object getBean() {
         return bean;
@@ -118,7 +120,7 @@ public class BeanDefinition {
 }
 ```
 
-## 定义ClassPathXmlApplicationContext
+## Defining ClassPathXmlApplicationContext
 
 ```java
 
@@ -158,12 +160,12 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 }
 ```
 
-## 定义XmlBeanDefinitionReader
+## Defining XmlBeanDefinitionReader
 
 ```java
 
 /**
- * XML配置文件形式的Bean定义读取类
+ * Bean definition reader for XML configuration files
  *
  * @author ziyang
  */
@@ -183,14 +185,14 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     DocumentBuilder documentBuilder = factory.newDocumentBuilder();
     Document document = documentBuilder.parse(inputStream);
-    // 解析xml document并注册bean
+    // Parse the XML document and register beans
     registerBeanDefinitions(document);
     inputStream.close();
   }
 
   public void registerBeanDefinitions(Document document) {
     Element root = document.getDocumentElement();
-    // 从文件根递归解析
+    // Recursively parse from the document root
     parseBeanDefinitions(root);
   }
 
@@ -224,7 +226,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         String name = propertyEle.getAttribute("name");
         String value = propertyEle.getAttribute("value");
         if (value != null && value.length() > 0) {
-          // 优先进行值注入
+          // Value injection takes priority
           beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
         } else {
           String ref = propertyEle.getAttribute("ref");
@@ -243,16 +245,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 
 
-## 总结
+## Summary
 
-+ ClassPathXmlApplication传入xml文件的路径，并且在构造函数中调用refresh方法
++ `ClassPathXmlApplication` takes the path of an XML file and calls the `refresh` method in its constructor.
 
-+ 在这个方法中由AbstractBeanFactory定义了一个工厂类，并且调用了obtainBeanFactory方法，在方法中调用了XmlBeanDefinitionReader类，这个类将XML转换成Resource流，并且读取了其中的key和value值，value值就是BeanDefinition
++ In this method, an `AbstractBeanFactory` defines a factory, and the `obtainBeanFactory` method is called. Inside, the `XmlBeanDefinitionReader` class converts the XML into a `Resource` stream and reads the key-value pairs, where the values are `BeanDefinition` objects.
 
-+ 由AutowiredCapableBeanFactory（自动装配工厂类）定义一个工厂，将上述的Key和Value注册到工厂中并且返回到上面定义的工厂类，即将BeanDefinition注册到工厂类中
++ An `AutowiredCapableBeanFactory` (auto-wiring factory) is created, and the key-value pairs from the previous step are registered into the factory. The factory is then returned as the main factory, meaning all `BeanDefinition` objects are now registered.
 
-+ 最后调用prepareBeanFactory方法，层层嵌套后是调用doCreateBean方法，将对象中的属性注入对象中，返回Bean到工厂中，此时BeanDefinition中的bean中就是一个实例化后、具有属性设置的对象了
++ Finally, the `prepareBeanFactory` method is called. Through nested method calls, it ultimately invokes `doCreateBean`, which injects properties into the objects and returns fully instantiated, property-populated beans to the factory.
 
-+ 之后，你就可以通过ByName或者ByClass来获取你的对象了
++ After that, you can retrieve your objects by name or by class.
 
-  > 部分内容参考来自https://4m.cn/F26GP
+  > Partially referenced from https://4m.cn/F26GP

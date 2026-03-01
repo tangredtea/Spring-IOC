@@ -8,7 +8,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 /**
- *  CGLIB 反射
+ * CGLIB-based AOP proxy
  * @author Ryan
  */
 public class Cglib2AopProxy implements AopProxy{
@@ -20,7 +20,7 @@ public class Cglib2AopProxy implements AopProxy{
     }
 
     /**
-     * 得到代理类
+     * Get the proxy object
      * @return object
      */
     @Override

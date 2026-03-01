@@ -1,12 +1,14 @@
 package myspring.springframework.beans.factory;
 
 /**
+ * Interface to be implemented by beans that need to react once all their properties have been set.
+ *
  * @author Ryan
  */
 public interface InitializingBean {
 
     /**
-     * Bean处理了属性填充
+     * Invoked by the containing BeanFactory after it has set all bean properties.
      */
     void afterPropertiesSet();
 

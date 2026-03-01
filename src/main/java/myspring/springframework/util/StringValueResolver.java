@@ -6,8 +6,8 @@ package myspring.springframework.util;
 public interface StringValueResolver {
 
     /**
-     * 解析字符串接口
-     * @param strVal 字符串
+     * Resolve a string value
+     * @param strVal the string to resolve
      * @return value
      */
     String resolveStringValue(String strVal);

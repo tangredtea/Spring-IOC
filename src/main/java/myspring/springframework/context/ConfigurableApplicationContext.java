@@ -5,17 +5,17 @@ package myspring.springframework.context;
  */
 public interface ConfigurableApplicationContext extends ApplicationContext{
     /**
-     * 刷新容器
+     * Refresh the container
      */
     void refresh();
 
     /**
-     * 注册关闭监听
+     * Register a shutdown hook
      */
     void registerShutdownHook();
 
     /**
-     * 手动关闭逻辑
+     * Manually close the application context
      */
     void close();
 }

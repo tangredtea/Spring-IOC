@@ -1,20 +1,23 @@
 package myspring.springframework.aop;
 
 /**
- * 核心 Spring 切入点抽象
+ * Core Spring pointcut abstraction.
+ *
  * @author Ryan
  */
 public interface Pointcut {
 
     /**
-     * 得到class过滤器
-     * @return filter
+     * Return the ClassFilter for this pointcut.
+     *
+     * @return the ClassFilter
      */
     ClassFilter getClassFilter();
 
     /**
-     * 方法匹配
-     * @return matcher
+     * Return the MethodMatcher for this pointcut.
+     *
+     * @return the MethodMatcher
      */
     MethodMatcher getMethodMatcher();
 }

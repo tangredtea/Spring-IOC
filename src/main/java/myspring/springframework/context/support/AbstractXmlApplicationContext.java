@@ -19,8 +19,8 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
     }
 
     /**
-     * 得到配置文件路径
-     * @return 字符串数组
+     * Get the configuration file paths
+     * @return string array
      */
     protected abstract String[] getConfigLocations();
 
