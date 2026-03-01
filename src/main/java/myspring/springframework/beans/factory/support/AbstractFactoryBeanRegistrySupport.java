@@ -33,10 +33,9 @@ public abstract class AbstractFactoryBeanRegistrySupport extends DefaultSingleto
 
     private Object doGetObjectFromFactoryBean(final FactoryBean factory, final String beanName){
         try {
-            factory.getObject();
+            return factory.getObject();
         } catch (Exception e) {
             throw new BeansException("FactoryBean threw exception on object[" + beanName + "] creation", e);
         }
-        return null;
     }
 }

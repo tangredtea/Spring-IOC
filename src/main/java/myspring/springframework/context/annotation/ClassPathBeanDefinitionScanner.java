@@ -22,7 +22,7 @@ public class ClassPathBeanDefinitionScanner extends ClasspathScanningCandidateCo
         for (String basePackage : basePackages) {
             Set<BeanDefinition> candidateComponents = findCandidateComponents(basePackage);
             for (BeanDefinition candidateComponent : candidateComponents) {
-                // 解析 Bean 的作用域 singleton、prototype
+                // Resolve the bean scope: singleton or prototype
                 String s = resolveBeanScope(candidateComponent);
                 if (StrUtil.isNotEmpty(s)){
                     candidateComponent.setScope(s);
@@ -30,7 +30,7 @@ public class ClassPathBeanDefinitionScanner extends ClasspathScanningCandidateCo
                 registry.registerBeanDefinition(determineBeanName(candidateComponent), candidateComponent);
             }
         }
-        // 注册处理注解的 BeanPostProcessor（@Autowired、@Value）
+        // Register the BeanPostProcessor that handles annotations (@Autowired, @Value)
         registry.registerBeanDefinition("myspring.springframework.context.annotation.internalAutowiredAnnotationProcessor", new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 

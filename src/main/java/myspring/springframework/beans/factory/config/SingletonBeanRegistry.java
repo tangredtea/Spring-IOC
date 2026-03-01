@@ -1,22 +1,25 @@
 package myspring.springframework.beans.factory.config;
 
 /**
- * 单例注册
+ * Interface that defines a registry for shared bean instances.
+ *
  * @author Ryan
  */
 public interface SingletonBeanRegistry {
 
     /**
-     * 得到单例对象
-     * @param beanName 单例对象名
-     * @return object
+     * Return the singleton object registered under the given name.
+     *
+     * @param beanName the name of the bean to look for
+     * @return the registered singleton object, or {@code null} if none found
      */
     Object getSingleton(String beanName);
 
     /**
-     * 注册单例
-     * @param beanName 单例对象名
-     * @param singletonObject 单例对象
+     * Register the given existing object as singleton in the bean registry.
+     *
+     * @param beanName        the name of the bean
+     * @param singletonObject the existing singleton object
      */
     void registerSingleton(String beanName, Object singletonObject);
 }

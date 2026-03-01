@@ -22,7 +22,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     }
 
     /**
-     * 得到注册表
+     * Get the bean definition registry
      *
      * @return beanDefinitionRegistry
      */
@@ -32,7 +32,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     }
 
     /**
-     * 得到资源加载器
+     * Get the resource loader
      *
      * @return resourceLoader
      */

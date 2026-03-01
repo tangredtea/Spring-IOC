@@ -5,22 +5,26 @@ import myspring.springframework.beans.BeansException;
 import java.util.Map;
 
 /**
+ * Extension of BeanFactory to be implemented by bean factories that can enumerate all their bean instances.
+ *
  * @author Ryan
  */
-public interface ListableBeanFactory extends BeanFactory{
+public interface ListableBeanFactory extends BeanFactory {
 
     /**
-     * 按照类型返回 Bean 实例
-     * @param type 类型
-     * @param <T> 泛型
-     * @return map
-     * @throws BeansException 异常
+     * Return the bean instances that match the given type (including subclasses).
+     *
+     * @param type the class or interface to match
+     * @param <T>  the type of the beans
+     * @return a Map with the matching beans, containing the bean names as keys and bean instances as values
+     * @throws BeansException if a bean could not be created
      */
     <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException;
 
     /**
-     * 返回注册表中的所有name
-     * @return name数组
+     * Return the names of all beans defined in this factory.
+     *
+     * @return the names of all beans defined in this factory
      */
     String[] getBeanDefinitionNames();
 

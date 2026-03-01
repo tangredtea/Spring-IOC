@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 切点表达式
- * 使用 AspectJ 编织器来评估切入点表达式。
+ * Pointcut Expression
+ * Uses the AspectJ weaver to evaluate pointcut expressions.
  * @author Ryan
  */
 public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
@@ -31,10 +31,10 @@ public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     /**
-     * 匹配方法
+     * Match class
      *
-     * @param clazz 类
-     * @return 布尔值
+     * @param clazz the class to match
+     * @return boolean
      */
     @Override
     public boolean matches(Class<?> clazz) {
@@ -42,11 +42,11 @@ public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     /**
-     * 匹配方法
+     * Match method
      *
-     * @param method      方法
-     * @param targetClass 目标class
-     * @return 布尔值
+     * @param method      the method to match
+     * @param targetClass the target class
+     * @return boolean
      */
     @Override
     public boolean matches(Method method, Class<?> targetClass) {
@@ -54,7 +54,7 @@ public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     /**
-     * class过滤器
+     * Get class filter
      *
      * @return filter
      */
@@ -64,7 +64,7 @@ public class AspectjExpressionPointcut implements Pointcut, ClassFilter, MethodM
     }
 
     /**
-     * 方法匹配
+     * Get method matcher
      *
      * @return matcher
      */

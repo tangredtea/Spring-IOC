@@ -3,27 +3,31 @@ package myspring.springframework.beans.factory.config;
 import myspring.springframework.beans.BeansException;
 
 /**
+ * Factory hook that allows for custom modification of new bean instances.
+ *
  * @author Ryan
  */
 public interface BeanPostProcessor {
 
     /**
-     * 在 Bean 对象执行初始化方法之前，执行此方法
+     * Apply this BeanPostProcessor to the given new bean instance <i>before</i> any bean
+     * initialization callbacks (like InitializingBean's afterPropertiesSet or a custom init-method).
      *
-     * @param bean 对象
-     * @param beanName bean名字
-     * @return object
-     * @throws BeansException 异常
+     * @param bean     the new bean instance
+     * @param beanName the name of the bean
+     * @return the bean instance to use, either the original or a wrapped one
+     * @throws BeansException if an error occurs
      */
     Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
 
     /**
-     * 在 Bean 对象执行初始化方法之后，执行此方法
+     * Apply this BeanPostProcessor to the given new bean instance <i>after</i> any bean
+     * initialization callbacks (like InitializingBean's afterPropertiesSet or a custom init-method).
      *
-     * @param bean 对象
-     * @param beanName bean名字
-     * @return object
-     * @throws BeansException 异常
+     * @param bean     the new bean instance
+     * @param beanName the name of the bean
+     * @return the bean instance to use, either the original or a wrapped one
+     * @throws BeansException if an error occurs
      */
     Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
 }

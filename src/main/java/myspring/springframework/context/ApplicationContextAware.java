@@ -9,9 +9,9 @@ import myspring.springframework.beans.BeansException;
 public interface ApplicationContextAware extends Aware {
 
     /**
-     * 设置应用上下文
-     * @param applicationContext 应用上下文
-     * @throws BeansException 异常
+     * Set the application context
+     * @param applicationContext the application context
+     * @throws BeansException exception
      */
     void setApplicationContext(ApplicationContext applicationContext) throws BeansException;
 

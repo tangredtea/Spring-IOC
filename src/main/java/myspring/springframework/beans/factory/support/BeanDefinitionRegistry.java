@@ -9,30 +9,30 @@ import myspring.springframework.beans.factory.config.BeanDefinition;
 public interface BeanDefinitionRegistry {
 
     /**
-     * 向注册表中注册 BeanDefinition
-     * @param beanName 名字
-     * @param beanDefinition 定义
+     * Register a BeanDefinition in the registry
+     * @param beanName the name of the bean
+     * @param beanDefinition the bean definition
      */
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
 
     /**
-     * 使用Bean名称查询BeanDefinition
-     * @param beanName 名字
+     * Look up a BeanDefinition by bean name
+     * @param beanName the name of the bean
      * @return beanDefinition
-     * @throws BeansException 异常
+     * @throws BeansException if the bean definition cannot be found
      */
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     /**
-     * 判断是否包含指定名称的BeanDefinition
-     * @param beanName 名字
-     * @return 布尔值
+     * Check whether the registry contains a BeanDefinition with the given name
+     * @param beanName the name of the bean
+     * @return true if the registry contains a matching BeanDefinition
      */
     boolean containsBeanDefinition(String beanName);
 
     /**
-     * 返回注册表中的所有names
-     * @return name
+     * Return the names of all beans defined in this registry
+     * @return the array of bean names
      */
     String[] getBeanDefinitionNames();
 }

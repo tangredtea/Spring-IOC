@@ -1,15 +1,17 @@
 package myspring.springframework.aop;
 
 /**
- * 限制切入点匹配或对给定目标类的匹配的过滤器。
+ * Filter that restricts matching of a pointcut to a given set of target classes.
+ *
  * @author Ryan
  */
 public interface ClassFilter {
 
     /**
-     * 匹配该类或者接口是否适用
-     * @param clazz 类
-     * @return 布尔值
+     * Should the pointcut apply to the given interface or target class?
+     *
+     * @param clazz the candidate target class
+     * @return whether the advice should apply to the given target class
      */
     boolean matches(Class<?> clazz);
 

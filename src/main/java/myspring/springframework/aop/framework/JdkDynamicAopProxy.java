@@ -27,7 +27,7 @@ public class JdkDynamicAopProxy implements AopProxy, InvocationHandler {
     }
 
     /**
-     * 得到代理类
+     * Get the proxy object
      *
      * @return object
      */

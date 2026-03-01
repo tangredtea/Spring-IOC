@@ -5,23 +5,23 @@ import myspring.springframework.aop.PointcutAdvisor;
 import org.aopalliance.aop.Advice;
 
 /**
- * 可用于任何 AspectJ 切入点表达式的 Spring AOP Advisor。
+ * Spring AOP Advisor that can be used with any AspectJ pointcut expression.
  * @author Ryan
  */
 public class AspectjExpressionPointcutAdvisor implements PointcutAdvisor {
 
     /**
-     * 切面
+     * Pointcut
      */
     private AspectjExpressionPointcut pointcut;
 
     /**
-     * 具体拦截方法
+     * Interceptor advice
      */
     private Advice advice;
 
     /**
-     * 表达式
+     * Expression
      */
     private String expression;
 
@@ -35,9 +35,9 @@ public class AspectjExpressionPointcutAdvisor implements PointcutAdvisor {
     }
 
     /**
-     * 得到连接点
+     * Get the pointcut
      *
-     * @return 连接点
+     * @return the pointcut
      */
     @Override
     public Pointcut getPointcut() {

@@ -29,11 +29,11 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     private ConversionService conversionService;
 
     /**
-     * 获取bean
+     * Get a bean instance
      *
-     * @param name bean名字
+     * @param name bean name
      * @return object
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public Object getBean(String name) throws BeansException {
@@ -41,12 +41,12 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     }
 
     /**
-     * 获取bean
+     * Get a bean instance
      *
-     * @param name 名字
-     * @param args 参数
+     * @param name bean name
+     * @param args constructor arguments
      * @return object
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
@@ -54,12 +54,12 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     }
 
     /**
-     * 获取对象
+     * Get a bean instance of the specified type
      *
-     * @param name         对象名
-     * @param requiredType 需要的class
+     * @param name         bean name
+     * @param requiredType required class type
      * @return bean
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
@@ -67,9 +67,9 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     }
 
     /**
-     * 得到单例对象
+     * Get a singleton bean instance
      *
-     * @param beanName 单例对象名
+     * @param beanName singleton bean name
      * @return object
      */
     @Override
@@ -80,7 +80,7 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     protected <T> T doGetBean(final String name, final Object[] args){
         Object bean = getSingleton(name);
         if (bean != null){
-            // 如果是FactoryBean，则需要调用FactoryBean
+            // If it is a FactoryBean, invoke the FactoryBean to get the object
             return (T) getObjectForBeanInstance(bean, name);
         }
         BeanDefinition beanDefinition = getBeanDefinition(name);
@@ -101,20 +101,20 @@ public abstract class AbstractBeanFactory extends AbstractFactoryBeanRegistrySup
     }
 
     /**
-     * 得到bean定义
-     * @param beanName 名字
+     * Get the bean definition
+     * @param beanName bean name
      * @return beanDefinition
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     /**
-     * 创造Bean
-     * @param beanName 名字
-     * @param beanDefinition 定义
-     * @param args 参数
+     * Create a bean instance
+     * @param beanName bean name
+     * @param beanDefinition bean definition
+     * @param args constructor arguments
      * @return object
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws  BeansException;
 

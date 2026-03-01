@@ -12,7 +12,7 @@ public class DefaultConversionService extends GenericConversionServiceImpl {
     }
 
     public static void addDefaultConverters(ConverterRegistry converterRegistry) {
-        // 添加各类类型转换工厂
+        // Add default type converter factories
         converterRegistry.addConverterFactory(new StringToNumberConverterFactory());
     }
 

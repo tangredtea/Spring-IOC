@@ -6,20 +6,22 @@ import net.sf.cglib.proxy.NoOp;
 import java.lang.reflect.Constructor;
 
 /**
+ * CGLIB-based instantiation strategy using subclass generation.
+ *
  * @author Ryan
  */
-public class CglibSubclassingInstantiationStrategy implements InstantiationStrategy{
+public class CglibSubclassingInstantiationStrategy implements InstantiationStrategy {
     /**
-     * 实例化策略
+     * Instantiate a bean using CGLIB subclass generation.
      *
-     * @param beanDefinition 定义
-     * @param beanName       名字
-     * @param ctor           构造器
-     * @param args           参数
-     * @return object
+     * @param beanDefinition the bean definition
+     * @param beanName       the name of the bean
+     * @param ctor           the constructor to use
+     * @param args           the constructor arguments
+     * @return the instantiated object
      */
     @Override
-    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor ctor, Object[] args) {
+    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object[] args) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(beanDefinition.getBeanClass());
         enhancer.setCallback(new NoOp() {

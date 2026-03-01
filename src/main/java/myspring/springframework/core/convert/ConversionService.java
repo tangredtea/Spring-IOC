@@ -3,24 +3,28 @@ package myspring.springframework.core.convert;
 import org.jetbrains.annotations.Nullable;
 
 /**
+ * A service interface for type conversion.
+ *
  * @author Ryan
  */
 public interface ConversionService {
 
     /**
-     * 判断是否能转换
-     * @param sourceType 源
-     * @param targetType 目标
-     * @return 布尔值
+     * Return whether objects of sourceType can be converted to the targetType.
+     *
+     * @param sourceType the source type to convert from
+     * @param targetType the target type to convert to
+     * @return true if a conversion can be performed
      */
     boolean canConvert(@Nullable Class<?> sourceType, Class<?> targetType);
 
     /**
-     * 转换类型
-     * @param source 源
-     * @param targetType 目标
-     * @param <T> 泛型
-     * @return object
+     * Convert the given source to the specified targetType.
+     *
+     * @param source     the source object to convert
+     * @param targetType the target type to convert to
+     * @param <T>        the target type
+     * @return the converted object
      */
     <T> T convert(Object source, Class<T> targetType);
 

@@ -31,7 +31,7 @@ public class ConversionServiceFactoryBean implements FactoryBean<ConversionServi
 
     @Override
     public Class<?> getObjectType() {
-        return conversionService.getClass();
+        return conversionService != null ? conversionService.getClass() : null;
     }
 
     @Override

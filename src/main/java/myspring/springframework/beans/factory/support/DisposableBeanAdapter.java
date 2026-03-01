@@ -24,15 +24,15 @@ public class DisposableBeanAdapter implements DisposableBean {
     }
 
     /**
-     * 销毁方法
+     * Invoke the destroy method on the bean
      */
     @Override
     public void destroy() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        // Disposable接口销毁
+        // Destroy via DisposableBean interface
         if (bean instanceof DisposableBean){
             ((DisposableBean) bean).destroy();
         }
-        // 配置信息 destroy-method销毁
+        // Destroy via configured destroy-method
         if (StrUtil.isNotEmpty(destroyMethodName) && !(bean instanceof  DisposableBean && "destroy".equals(this.destroyMethodName))){
             Method method = bean.getClass().getMethod(destroyMethodName);
             method.invoke(bean);

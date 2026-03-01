@@ -24,9 +24,9 @@ public abstract class AbstractApplicationEventMulticaster implements Application
     private BeanFactory beanFactory;
 
     /**
-     * 设置工厂
-     * @param beanFactory 工厂
-     * @throws BeansException 异常
+     * Set the bean factory
+     * @param beanFactory the bean factory
+     * @throws BeansException exception
      */
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -34,9 +34,9 @@ public abstract class AbstractApplicationEventMulticaster implements Application
     }
 
     /**
-     * 添加监听器
+     * Add a listener
      *
-     * @param listener 监听器
+     * @param listener the listener
      */
     @Override
     public void addApplicationListener(ApplicationListener<?> listener) {
@@ -44,9 +44,9 @@ public abstract class AbstractApplicationEventMulticaster implements Application
     }
 
     /**
-     * 移除监听器
+     * Remove a listener
      *
-     * @param listener 监听器
+     * @param listener the listener
      */
     @Override
     public void removeApplicationListener(ApplicationListener<?> listener) {
@@ -71,14 +71,14 @@ public abstract class AbstractApplicationEventMulticaster implements Application
     }
 
     /**
-     * 监听器是否对该事件感兴趣
-     * @param applicationListener 监听器
-     * @param event 事件
-     * @return 布尔值
+     * Check whether the listener is interested in the given event
+     * @param applicationListener the listener
+     * @param event the event
+     * @return boolean
      */
     protected boolean supportsEvent(ApplicationListener<AbstractApplicationEvent> applicationListener, AbstractApplicationEvent event){
         Class<? extends ApplicationListener> aClass = applicationListener.getClass();
-        // 根据策略模式的初始化实例化不同的类型，需要判断后获取目标class
+        // Different types are instantiated based on the strategy pattern; determine and retrieve the target class accordingly
         Class<?> targetClass = ClassUtils.isCglibProxyClass(aClass) ? aClass.getSuperclass() : aClass;
         Type genericInterface = targetClass.getGenericInterfaces()[0];
         Type actualTypeArgument = ((ParameterizedType) genericInterface).getActualTypeArguments()[0];
@@ -89,8 +89,10 @@ public abstract class AbstractApplicationEventMulticaster implements Application
         } catch (ClassNotFoundException e) {
             throw new BeansException("wrong event class name: " + clazz);
         }
-        // 判定此 eventClassName 对象所表示的类或接口与指定的 event.getClass() 参数所表示的类或接口是否相同，或是否是其超类或超接口。
-        // isAssignableFrom是用来判断子类和父类的关系的，或者接口的实现类和接口的关系的，默认所有的类的终极父类都是Object。如果A.isAssignableFrom(B)结果是true，证明B可以转换成为A,也就是A可以由B转换而来。
+        // Determine whether the class or interface represented by eventClassName is the same as, or is a superclass/superinterface of,
+        // the class or interface represented by event.getClass().
+        // isAssignableFrom checks the relationship between a subclass and a superclass, or between an implementation and its interface.
+        // All classes ultimately extend Object. If A.isAssignableFrom(B) returns true, it means B can be cast to A.
         return eventClassName.isAssignableFrom(event.getClass());
     }
 }

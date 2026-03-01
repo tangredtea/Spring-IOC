@@ -7,21 +7,23 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * Simple instantiation strategy using JDK reflection.
+ *
  * @author Ryan
  */
-public class SimpleInstantiationStrategy implements InstantiationStrategy{
+public class SimpleInstantiationStrategy implements InstantiationStrategy {
     /**
-     * 实例化策略
+     * Instantiate a bean using JDK reflection.
      *
-     * @param beanDefinition 定义
-     * @param beanName       名字
-     * @param ctor           构造器
-     * @param args           参数
-     * @return object
+     * @param beanDefinition the bean definition
+     * @param beanName       the name of the bean
+     * @param ctor           the constructor to use
+     * @param args           the constructor arguments
+     * @return the instantiated object
      */
     @Override
-    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor ctor, Object[] args) {
-        Class clazz = beanDefinition.getBeanClass();
+    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object[] args) {
+        Class<?> clazz = beanDefinition.getBeanClass();
         try {
             if (null != ctor){
                 return clazz.getDeclaredConstructor(ctor.getParameterTypes()).newInstance(args);

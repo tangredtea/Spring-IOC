@@ -10,12 +10,12 @@ import java.lang.reflect.Constructor;
 public interface InstantiationStrategy {
 
     /**
-     * 实例化策略
-     * @param beanDefinition 定义
-     * @param beanName 名字
-     * @param ctor 构造器
-     * @param args 参数
-     * @return object
+     * Instantiate a bean using the given strategy
+     * @param beanDefinition the bean definition
+     * @param beanName the name of the bean
+     * @param ctor the constructor to use
+     * @param args the constructor arguments
+     * @return the instantiated object
      */
-    Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor ctor, Object[] args);
+    Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor<?> ctor, Object[] args);
 }

@@ -4,13 +4,18 @@ import myspring.springframework.beans.BeansException;
 import myspring.springframework.beans.factory.ConfigurableListableBeanFactory;
 
 /**
+ * Factory hook that allows for custom modification of an application context's bean definitions,
+ * adapting the bean property values of the context's underlying bean factory.
+ *
  * @author Ryan
  */
 public interface BeanFactoryPostProcessor {
     /**
-     * 在所有的 BeanDefinition 加载完成后，实例化 Bean 对象之前，提供修改 BeanDefinition 属性的机制
-     * @param beanFactory 容器
-     * @throws BeansException 异常
+     * Modify the application context's internal bean factory after its standard initialization.
+     * All bean definitions will have been loaded, but no beans will have been instantiated yet.
+     *
+     * @param beanFactory the bean factory used by the application context
+     * @throws BeansException if an error occurs
      */
     void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException;
 }

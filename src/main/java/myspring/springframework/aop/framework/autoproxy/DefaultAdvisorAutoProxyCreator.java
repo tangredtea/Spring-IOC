@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 基于当前 BeanFactory 中的所有候选者创建 AOP 代理的 BeanPostProcessor 实现。
+ * BeanPostProcessor implementation that creates AOP proxies based on all candidate advisors in the current BeanFactory.
  * @author Ryan
  */
 public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
@@ -28,10 +28,10 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
     private final Set<Object> earlyProxyReferences = Collections.synchronizedSet(new HashSet<>());
 
     /**
-     * 设置工厂
+     * Set the bean factory
      *
-     * @param beanFactory 工厂
-     * @throws BeansException 异常
+     * @param beanFactory the bean factory
+     * @throws BeansException exception
      */
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -39,11 +39,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
     }
 
     /**
-     * 实例化bean前处理
-     * @param beanClass class
-     * @param beanName  对象名
-     * @return 对象
-     * @throws BeansException 异常
+     * Pre-instantiation processing of bean
+     * @param beanClass the class of the bean
+     * @param beanName  the name of the bean
+     * @return the bean object
+     * @throws BeansException exception
      */
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
@@ -56,28 +56,25 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
     }
 
     /**
-     * 在 Bean 对象执行初始化方法之前，执行此方法
+     * Execute this method before the bean object's initialization method is invoked
      *
-     * @param bean     对象
-     * @param beanName bean名字
+     * @param bean     the bean object
+     * @param beanName the name of the bean
      * @return object
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (!earlyProxyReferences.contains(beanName)){
-            return wrapIfNecessary(bean, beanName);
-        }
         return bean;
     }
 
     /**
-     * 在 Bean 对象执行初始化方法之后，执行此方法
+     * Execute this method after the bean object's initialization method is invoked
      *
-     * @param bean     对象
-     * @param beanName bean名字
+     * @param bean     the bean object
+     * @param beanName the name of the bean
      * @return object
-     * @throws BeansException 异常
+     * @throws BeansException exception
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
@@ -100,7 +97,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
     private Object wrapIfNecessary(Object bean, String name) {
         Class<?> beanClass = bean.getClass();
         if (isInfrastructureClass(beanClass)){
-            return null;
+            return bean;
         }
         Collection<AspectjExpressionPointcutAdvisor> values = beanFactory.getBeansOfType(AspectjExpressionPointcutAdvisor.class).values();
         for (AspectjExpressionPointcutAdvisor value : values) {
@@ -125,7 +122,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
      * to the given bean. Allows for checking whether all dependencies have been
      * satisfied, for example based on a "Required" annotation on bean property setters.
      * <p>
-     * 在 Bean 对象实例化完成后，设置属性操作之前执行此方法
+     * Executed after the bean object has been instantiated, but before property values are set
      *
      * @param pvs
      * @param bean

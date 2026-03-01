@@ -10,6 +10,7 @@ import myspring.springframework.core.io.Resource;
 import myspring.springframework.util.StringValueResolver;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -25,21 +26,24 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
 
 
     /**
-     * 在所有的 BeanDefinition 加载完成后，实例化 Bean 对象之前，提供修改 BeanDefinition 属性的机制
+     * After all BeanDefinitions are loaded and before bean objects are instantiated,
+     * provide a mechanism to modify BeanDefinition properties
      *
-     * @param beanFactory 容器
-     * @throws BeansException 异常
+     * @param beanFactory the bean factory
+     * @throws BeansException exception
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         try {
-            // 加载属性文件
+            // Load the properties file
             DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
             Resource resource = resourceLoader.getResource(location);
 
-            // 占位符替换属性值
+            // Replace placeholder values with property values
             Properties properties = new Properties();
-            properties.load(resource.getInputStream());
+            try (InputStream inputStream = resource.getInputStream()) {
+                properties.load(inputStream);
+            }
 
             String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
             for (String beanName : beanDefinitionNames) {
@@ -56,7 +60,7 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
                 }
             }
 
-            // 向容器中添加字符串解析器，供解析@Value注解使用
+            // Add a string value resolver to the container for resolving @Value annotations
             StringValueResolver valueResolver = new PlaceholderResolvingStringValueResolver(properties);
             beanFactory.addEmbeddedValueResolver(valueResolver);
 
@@ -91,9 +95,9 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
         }
 
         /**
-         * 解析字符串接口
+         * Resolve a string value
          *
-         * @param strVal 字符串
+         * @param strVal the string to resolve
          * @return value
          */
         @Override

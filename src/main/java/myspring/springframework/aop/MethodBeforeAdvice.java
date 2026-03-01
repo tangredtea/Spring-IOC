@@ -6,16 +6,19 @@ import org.aopalliance.aop.Advice;
 import java.lang.reflect.Method;
 
 /**
+ * Advice invoked before a method is invoked.
+ *
  * @author Ryan
  */
 public interface MethodBeforeAdvice extends Advice {
 
     /**
-     * 方法之前进行拦截
-     * @param method 方法
-     * @param args 参数
-     * @param target 目标对象
-     * @throws Throwable 异常
+     * Callback before a given method is invoked.
+     *
+     * @param method the method being invoked
+     * @param args   the arguments to the method
+     * @param target the target of the method invocation
+     * @throws Throwable if this object wishes to abort the call
      */
     void before(Method method, Object[] args, Object target) throws Throwable;
 }

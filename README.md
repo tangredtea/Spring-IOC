@@ -5,27 +5,31 @@
 [![issues](https://badgen.net/github/open-issues/laowenruo/Spring-IOC)](https://github.com/laowenruo/Spring-IOC/issues)
 [![PRs Welcome](https://badgen.net/badge/PRs/welcome/green)](http://makeapullrequest.com)
 # My-Spring-IOC
-Spring IOC容器简单实现，实现了一些基本的核心功能以及简单的MVC基本框架及映射访问
+A simplified implementation of the Spring IOC container, covering core features such as dependency injection, AOP proxy, event mechanism, type conversion, and a basic MVC framework with route mapping.
 
-## 说明文档
-- [Spring手写XML注入方式](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring%E6%89%8B%E5%86%99XML%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F.md)
-- [Spring手写注解注入方式](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring%E6%89%8B%E5%86%99%E6%B3%A8%E8%A7%A3%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F.md)
-- [Spring手写简单MVC实现](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring%E6%89%8B%E5%86%99%E7%AE%80%E5%8D%95MVC%E5%AE%9E%E7%8E%B0.md)
-### 目前已实现：
-- xml注入
-- 注解注入
-- 简单MVC功能
-### 注入支持
-- 递归注入
-- 属性注入
-- 引用注入（但未解决循环依赖）
-- 注解配置
-- 单例以及原型模式切换
-### 运用的设计模式
-- 工厂设计模式 : Spring使用工厂模式通过 BeanFactory、ApplicationContext 创建 bean 对象。
-- 单例设计模式 : Spring 中的 Bean 默认都是单例的。
-- 适配器模式 :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配Controller。（体现了一点）
+## Documentation
+- [Handwritten Spring XML Injection](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring-Handwritten-XML-Injection.md)
+- [Handwritten Spring Annotation Injection](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring-Handwritten-Annotation-Injection.md)
+- [Handwritten Spring Simple MVC](https://github.com/laowenruo/Spring-IOC/blob/master/docs/Spring-Handwritten-Simple-MVC.md)
 
-### TODO：
-- AOP实现
-- 循环依赖
+### Implemented Features
+- XML-based bean injection
+- Annotation-based bean injection
+- Basic MVC functionality
+- AOP (Aspect-Oriented Programming) support
+- Circular dependency resolution (three-level cache)
+
+### Injection Support
+- Recursive injection
+- Property injection
+- Reference injection (with circular dependency resolution)
+- Annotation-based configuration (`@Component`, `@Autowired`, `@Value`, `@Qualifier`, `@Scope`)
+- Singleton and prototype scope switching
+
+### Design Patterns Used
+- **Factory Pattern**: Spring uses the Factory pattern to create bean objects via `BeanFactory` and `ApplicationContext`.
+- **Singleton Pattern**: Beans in Spring are singletons by default.
+- **Adapter Pattern**: Spring AOP advice uses the Adapter pattern; Spring MVC also uses the Adapter pattern for Controller adaptation.
+- **Proxy Pattern**: AOP proxy creation using JDK dynamic proxy and CGLIB.
+- **Template Method Pattern**: `AbstractBeanFactory` and `AbstractApplicationContext` define skeleton algorithms, deferring steps to subclasses.
+- **Observer Pattern**: The event mechanism (`ApplicationEvent` / `ApplicationListener`) implements the Observer pattern.

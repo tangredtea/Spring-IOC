@@ -13,9 +13,9 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
         setBeanFactory(beanFactory);
     }
     /**
-     * 广播事件
+     * Multicast the event
      *
-     * @param event 事件
+     * @param event the event
      */
     @Override
     public void multicastEvent(AbstractApplicationEvent event) {

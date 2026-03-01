@@ -8,9 +8,9 @@ import myspring.springframework.beans.BeansException;
 public interface ObjectFactory<T> {
 
     /**
-     * 得到对象
-     * @return object
-     * @throws BeansException 异常
+     * Get the object managed by this factory
+     * @return the object instance
+     * @throws BeansException if an error occurs while creating the object
      */
     T getObject() throws BeansException;
 }

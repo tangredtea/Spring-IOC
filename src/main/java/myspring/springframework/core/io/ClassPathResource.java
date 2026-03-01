@@ -2,6 +2,9 @@ package myspring.springframework.core.io;
 
 import cn.hutool.core.lang.Assert;
 import myspring.springframework.util.ClassUtils;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -24,12 +27,16 @@ public class ClassPathResource implements Resource{
     }
 
     /**
-     * 得到输入流
+     * Get the input stream for this resource
      *
      * @return InputStream
      */
     @Override
-    public InputStream getInputStream() {
-        return classLoader.getResourceAsStream(path);
+    public InputStream getInputStream() throws IOException {
+        InputStream is = classLoader.getResourceAsStream(path);
+        if (is == null) {
+            throw new FileNotFoundException(this.path + " cannot be opened because it does not exist");
+        }
+        return is;
     }
 }
